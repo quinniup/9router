@@ -16,6 +16,7 @@ const ICON_ALIASES = {
   "muse-web": "muse",
   "gemini-web": "gemini",
   "chatgpt-web": "openai",
+  "claude-code-cli": "claude",
 };
 
 // Runtime only — first 404 remembers id for the whole session

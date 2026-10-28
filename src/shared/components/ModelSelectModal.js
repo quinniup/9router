@@ -26,7 +26,7 @@ const NO_AUTH_PROVIDER_IDS = Object.keys(FREE_PROVIDERS).filter(id => FREE_PROVI
 // Static registry stays as fallback when live fetch fails or is empty.
 // zed added in #4244: its backend customResolver already returns live models
 // but the frontend omitted it, hiding Zed entirely from the Combo picker.
-const LIVE_CATALOG_PROVIDERS = ["cursor", "cline", "clinepass", "zed"];
+const LIVE_CATALOG_PROVIDERS = ["cursor", "cline", "clinepass", "zed", "claude-code-cli"];
 
 // Fetch a provider's account-scoped catalog for every active connection and merge
 // the results. Entries collapse by model id on purpose: two connections of the

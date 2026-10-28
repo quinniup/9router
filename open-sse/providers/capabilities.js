@@ -238,6 +238,16 @@ const DEVIN_CLI_GPT_CAPS = { vision: true, reasoning: true, search: true, thinki
  * Provider-specific capability overrides. Keyed by provider alias/id.
  */
 export const PROVIDER_CAPABILITIES = {
+  // Claude Code CLI model aliases resolve to current Claude models on the host
+  // CLI; without these, "opus"/"sonnet" match no Claude pattern and images
+  // would be stripped before reaching the CLI.
+  "claude-code-cli": {
+    "default": { vision: true, pdf: true, reasoning: true },
+    "opus": { vision: true, pdf: true, reasoning: true },
+    "sonnet": { vision: true, pdf: true, reasoning: true },
+    "haiku": { vision: true, pdf: true, reasoning: true },
+    "fable": { vision: true, pdf: true, reasoning: true },
+  },
   // NVIDIA NIM is OpenAI-compatible → rejects MiniMax/GLM native `thinking` field.
   // Force openai reasoning_effort format for its reasoning models. #issue
   "nvidia": {

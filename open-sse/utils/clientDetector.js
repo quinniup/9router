@@ -5,7 +5,9 @@
 
 // Map of CLI tool identifiers to provider IDs they are "native" to
 const NATIVE_PAIRS = {
-  "claude": ["claude", "anthropic"],
+  // claude-code-cli: Claude Code → the host's Claude Code CLI keeps the body
+  // as the client sent it (images, documents, thinking) for the CLI to replay.
+  "claude": ["claude", "anthropic", "claude-code-cli"],
   "gemini-cli": ["gemini-cli"],
   "antigravity": ["antigravity"],
   "codex": ["codex"],

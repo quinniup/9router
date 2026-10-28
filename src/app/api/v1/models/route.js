@@ -18,6 +18,7 @@ import { resolveClinepassModels, resolveClineModels } from "open-sse/services/cl
 import { resolveGrokCliModels } from "open-sse/services/grokCliModels.js";
 import { resolveCursorModels } from "open-sse/services/cursorModels.js";
 import { resolveZedModels } from "open-sse/shared/zedAuth.js";
+import { discoverClaudeCodeCli } from "open-sse/executors/claude-code-cli/discovery.js";
 import { updateProviderCredentials } from "@/sse/services/tokenRefresh";
 import { resolveConnectionProxyConfig } from "@/lib/network/connectionProxy";
 import { capabilitiesFromServiceKind, getCapabilitiesForModel, aggregateComboCapabilities } from "open-sse/providers/capabilities.js";
@@ -134,6 +135,10 @@ const LIVE_MODEL_RESOLVERS = {
       },
     });
     return result?.models?.length ? { models: result.models } : null;
+  },
+  "claude-code-cli": async () => {
+    const status = await discoverClaudeCodeCli();
+    return status.models.length ? { models: status.models.map(({ id, name }) => ({ id, name })) } : null;
   },
   cursor: async (conn) => {
     const result = await resolveCursorModels({

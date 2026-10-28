@@ -4,6 +4,7 @@ import { testProxyUrl } from "@/lib/network/proxyTest";
 import { isOpenAICompatibleProvider, isAnthropicCompatibleProvider, AI_PROVIDERS } from "@/shared/constants/providers";
 import { getDefaultModel } from "open-sse/config/providerModels.js";
 import { probeBedrockCredentials } from "open-sse/executors/bedrock.js";
+import { discoverClaudeCodeCli } from "open-sse/executors/claude-code-cli/discovery.js";
 import { resolveOllamaLocalHost, PROVIDERS } from "open-sse/config/providers.js";
 import { CODEX_CLI_VERSION } from "open-sse/config/appConstants.js";
 import { GROK_CLI_PAGER_USER_AGENT, GROK_CLI_VERSION } from "open-sse/config/grokCli.js";
@@ -364,6 +365,11 @@ function isTokenExpired(connection) {
 }
 
 async function testOAuthConnection(connection, effectiveProxy = null) {
+  // Host CLI connection: no stored token; the CLI's own login is what is tested.
+  if (connection.provider === "claude-code-cli") {
+    const status = await discoverClaudeCodeCli({ force: true });
+    return { valid: status.loggedIn, error: status.loggedIn ? null : status.error, refreshed: false };
+  }
   const config = OAUTH_TEST_CONFIG[connection.provider];
   if (!config) return { valid: false, error: "Provider test not supported", refreshed: false };
   if (!connection.accessToken) return { valid: false, error: "No access token", refreshed: false };

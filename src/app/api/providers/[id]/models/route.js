@@ -12,6 +12,7 @@ import { resolveGrokCliModels } from "open-sse/services/grokCliModels.js";
 import { resolveConnectionProxyConfig } from "@/lib/network/connectionProxy";
 import { resolveCursorModels } from "open-sse/services/cursorModels.js";
 import { resolveZedModels } from "open-sse/shared/zedAuth.js";
+import { discoverClaudeCodeCli } from "open-sse/executors/claude-code-cli/discovery.js";
 import { resolveClineModels, resolveClinepassModels } from "open-sse/services/clinepassModels.js";
 import { NOUS_MODELS_URL, normalizeNousModels } from "open-sse/services/nous.js";
 import codexProvider from "open-sse/providers/registry/codex.js";
@@ -392,6 +393,15 @@ const PROVIDER_MODELS_CONFIG = {
         console.log("Failed to fetch Zed models dynamically:", error.message);
         return { models: [], warning: `Failed to fetch Zed models: ${error.message}` };
       }
+    },
+  },
+
+  // Host Claude Code CLI: the models its initialize response lists.
+  "claude-code-cli": {
+    customResolver: async () => {
+      const status = await discoverClaudeCodeCli();
+      if (status.models.length) return { models: status.models };
+      return { models: [], warning: status.error || "Claude Code CLI reported no models." };
     },
   },
 
